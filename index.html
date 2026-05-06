@@ -2,18 +2,57 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Image Viewer</title>
+  <title>Mini App</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div id="drop-zone">
-  <h2>Upload an image</h2>
-  <p>Drag & drop qui dentro</p>
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="container">
+    <h1 class="title">🚀 My Mini App</h1>
+    <p class="subtitle">Scegli una funzione</p>
+
+    <div class="grid">
+      <div class="card" onclick="openPage('imageApp')">
+        <h2>🖼️ Image Viewer</h2>
+        <p>Carica e visualizza immagini fullscreen</p>
+      </div>
+
+      <div class="card" onclick="openPage('featureApp')">
+        <h2>⚙️ Funzione</h2>
+        <p>Placeholder per futura feature</p>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="viewer">
-  <img id="image" src="">
+<!-- IMAGE VIEWER -->
+<div id="imageApp" class="page">
+  <div class="topbar">
+    <button onclick="openPage('home')">← Home</button>
+  </div>
+
+  <div id="drop-zone">
+    <h2>Trascina un’immagine</h2>
+    <p>o rilasciala qui</p>
+  </div>
+
+  <div id="viewer">
+    <img id="image">
+  </div>
+</div>
+
+<!-- FEATURE PLACEHOLDER -->
+<div id="featureApp" class="page">
+  <div class="topbar">
+    <button onclick="openPage('home')">← Home</button>
+  </div>
+
+  <div class="feature">
+    <h1>⚙️ Funzione futura</h1>
+    <p>Qui puoi mettere qualunque cosa: editor, tool, AI, ecc.</p>
+  </div>
 </div>
 
 <script src="script.js"></script>
