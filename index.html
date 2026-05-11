@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="view active">
+  <div class="center">
+    <div class="cards">
+
+      <div class="card" onclick="navigate('png')">
+        <h2>PNG</h2>
+      </div>
+
+      <div class="card" onclick="navigate('text')">
+        <h2>TEXT</h2>
+      </div>
+
+      <div class="card" onclick="navigate('school')">
+        <h2>SCUOLA</h2>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PNG -->
+<div id="png" class="view">
+
+  <div class="topbar">
+    <button onclick="navigate('home')">Back</button>
+    <button onclick="resetUpload('png')">Upload</button>
+  </div>
+
+  <div id="png-drop" class="dropzone">
+    Drop image or click
+    <input type="file" id="png-input" accept="image/*">
+  </div>
+
+  <div id="png-viewer" class="viewer">
+    <img id="png-img">
+  </div>
+
+</div>
+
+<!-- TEXT -->
+<div id="text" class="view">
+
+  <div class="topbar">
+    <button onclick="navigate('home')">Back</button>
+  </div>
+
+  <div class="text-wrapper">
+    <textarea id="text-area" spellcheck="true" placeholder="Scrivi qui..."></textarea>
+  </div>
+
+</div>
+
+<!-- SCHOOL -->
+<div id="school" class="view">
+
+  <div class="topbar">
+    <button onclick="navigate('home')">Back</button>
+  </div>
+
+  <div class="school-container">
+
+    <div class="school-title">SCUOLA</div>
+
+    <div class="school-list">
+
+      <div class="school-item" onclick="navigate('sta')">
+        <div class="item-title">STA</div>
+        <div class="item-sub">Statistica e analisi</div>
+      </div>
+
+      <div class="school-item">
+        <div class="item-title">Diritto</div>
+        <div class="item-sub">Norme e concetti base</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- STA -->
+<div id="sta" class="view">
+
+  <div class="topbar">
+    <button onclick="navigate('school')">Back</button>
+  </div>
+
+  <div class="layout">
+
+    <div class="sidebar">
+
+      <div class="side-title">STA</div>
+
+      <div class="side-item" onclick="openTopic('bit')">
+        Bit e Byte
+      </div>
+
+      <div class="side-item" onclick="openTopic('sistemi')">
+        Sistemi numerici
+      </div>
+
+      <div class="side-item" onclick="openTopic('prob')">
+        Probabilità
+      </div>
+
+    </div>
+
+    <div class="content" id="sta-content">
+      <h1>Benvenuto in STA</h1>
+      <p>Seleziona un argomento a sinistra</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- BIT E BYTE PAGE -->
+<div id="bit" class="view">
+
+  <div class="topbar">
+    <button onclick="navigate('sta')">Back</button>
+  </div>
+
+  <div class="chapter-page">
+
+    <h1>Bit e Byte</h1>
+
+    <div class="chapter-content">
+      <!-- INCOLLA QUI IL TUO CODICE HTML -->
+      <p>Inserisci qui il tuo contenuto HTML di Bit e Byte</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
