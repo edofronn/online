@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ripasso Verifica — Informazione & Reti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0e0f14;
+    --surface: #16181f;
+    --card: #1c1f2a;
+    --border: #2a2d3a;
+    --accent: #6c8fff;
+    --accent2: #ff6b8a;
+    --accent3: #50e3a4;
+    --accent4: #ffc53d;
+    --text: #e8eaf0;
+    --muted: #7a7f99;
+    --code-bg: #111318;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  header {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0a0c14 0%, var(--bg) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 200px;
+    background: radial-gradient(ellipse, rgba(108,143,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    line-height: 1.1;
+    color: #fff;
+  }
+  header h1 span { color: var(--accent); }
+  header p {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1.2rem 2rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    justify-content: center;
+  }
+  nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all .15s;
+    cursor: pointer;
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  .chapter {
+    margin-bottom: 3rem;
+    animation: fadeUp .4s ease both;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .chapter-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(108,143,255,.1);
+    border: 1px solid rgba(108,143,255,.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .chapter-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #fff;
+  }
+  .chapter-line {
+    flex: 1; height: 1px; background: var(--border);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-title .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .card p, .card li { color: #bcc0d4; font-size: 14px; }
+  .card ul { padding-left: 1.2rem; }
+  .card li { margin-bottom: 0.2rem; }
+
+  .accent-green .dot { background: var(--accent3); }
+  .accent-pink .dot { background: var(--accent2); }
+  .accent-yellow .dot { background: var(--accent4); }
+
+  .formula {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--accent3);
+    margin: 0.6rem 0;
+    overflow-x: auto;
+  }
+
+  .example-box {
+    background: rgba(80,227,164,.05);
+    border: 1px solid rgba(80,227,164,.2);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin: 0.6rem 0;
+  }
+  .example-box .ex-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .example-box p { font-size: 13px; color: #b0d4c0; }
+  .example-box .result {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    margin-top: 0.3rem;
+  }
+
+  .warning-box {
+    background: rgba(255,107,138,.05);
+    border: 1px solid rgba(255,107,138,.2);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin: 0.6rem 0;
+    font-size: 13px;
+    color: #d4a0aa;
+  }
+  .warning-box strong { color: var(--accent2); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 0.6rem;
+  }
+  th {
+    background: rgba(108,143,255,.1);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(42,45,58,.6);
+    color: #bcc0d4;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--code-bg);
+    color: var(--accent4);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .tag-blue { background: rgba(108,143,255,.15); color: var(--accent); }
+  .tag-green { background: rgba(80,227,164,.15); color: var(--accent3); }
+  .tag-yellow { background: rgba(255,197,61,.15); color: var(--accent4); }
+
+  .sep { height: 1px; background: var(--border); margin: 1rem 0; }
+
+  .big-def {
+    font-size: 14px; color: #bcc0d4; margin-bottom: 0.5rem;
+  }
+</style>
+</head>
+<body>
+
+    <a href="../index.html" class="back-btn">← Back</a>
+
+<header>
+  <div class="label">Ripasso verifica</div>
+  <h1>Informazione, <span>Trasmissione</span> & Reti</h1>
+  <p>Tutti gli argomenti delle due slide — in bocca al lupo! 🍀</p>
+</header>
+
+<nav>
+  <a onclick="document.getElementById('bit').scrollIntoView({behavior:'smooth'})">Bit & Byte</a>
+  <a onclick="document.getElementById('shannon').scrollIntoView({behavior:'smooth'})">Shannon</a>
+  <a onclick="document.getElementById('sorgente').scrollIntoView({behavior:'smooth'})">Sorgente</a>
+  <a onclick="document.getElementById('canale').scrollIntoView({behavior:'smooth'})">Canale</a>
+  <a onclick="document.getElementById('bandwidth').scrollIntoView({behavior:'smooth'})">Bandwidth</a>
+  <a onclick="document.getElementById('bitrate').scrollIntoView({behavior:'smooth'})">Bit-rate</a>
+  <a onclick="document.getElementById('throughput').scrollIntoView({behavior:'smooth'})">Throughput</a>
+  <a onclick="document.getElementById('latenza').scrollIntoView({behavior:'smooth'})">Latenza</a>
+  <a onclick="document.getElementById('duplex').scrollIntoView({behavior:'smooth'})">Duplex</a>
+  <a onclick="document.getElementById('reti').scrollIntoView({behavior:'smooth'})">Tipi di reti</a>
+  <a onclick="document.getElementById('indirizzi').scrollIntoView({behavior:'smooth'})">Indirizzi</a>
+</nav>
+
+<main>
+
+<!-- ───────── BIT E BYTE ───────── -->
+<section class="chapter" id="bit">
+  <div class="chapter-header">
+    <div class="chapter-num">01</div>
+    <div class="chapter-title">Bit e Byte</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Definizioni</div>
+    <p><strong>Bit</strong> — unità minima di informazione: una scelta tra due alternative (0 oppure 1).</p>
+    <p style="margin-top:.5rem"><strong>Byte</strong> — 8 bit. La memoria si misura in byte; la trasmissione in bit.</p>
+    <p style="margin-top:.5rem">Con <em>n</em> bit si rappresentano <strong>2ⁿ</strong> combinazioni.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Multipli: prefisso decimale vs binario</div>
+    <table>
+      <tr><th>Decimale</th><th>Valore</th><th>Binario</th><th>Valore</th></tr>
+      <tr><td>1 KB</td><td>1 000 byte</td><td>1 KiB</td><td>1 024 byte</td></tr>
+      <tr><td>1 MB</td><td>1 000 000 byte</td><td>1 MiB</td><td>1 048 576 byte</td></tr>
+      <tr><td>1 GB</td><td>10⁹ byte</td><td>1 GiB</td><td>2³⁰ byte</td></tr>
+    </table>
+    <div class="warning-box" style="margin-top:.8rem">
+      <strong>⚠ Trappola tipica:</strong> i produttori di hard disk usano i multipli decimali, Windows quelli binari → un disco da "500 GB" appare come ~465 GiB.
+    </div>
+  </div>
+</section>
+
+<!-- ───────── SHANNON ───────── -->
+<section class="chapter" id="shannon">
+  <div class="chapter-header">
+    <div class="chapter-num">02</div>
+    <div class="chapter-title">Informazione di Shannon</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> L'idea chiave</div>
+    <p>Claude Shannon (Bell Labs, 1948) si chiese <em>quanti bit servono per trasmettere il risultato di un esperimento</em>. La risposta dipende da quanto il risultato è <strong>sorprendente</strong>: più è inaspettato, più informazione porta.</p>
+  </div>
+
+  <div class="card accent-green">
+    <div class="card-title"><span class="dot"></span> Formula</div>
+    <div class="formula">I = −log₂(p)</div>
+    <p>dove <em>p</em> è la probabilità dell'evento (numero tra 0.0 e 1.0).<br>
+    Più <em>p</em> è piccolo (evento raro) → più <em>I</em> è grande.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="example-box">
+      <div class="ex-label">Esempio 1 — Moneta equa</div>
+      <p>p = 0.5 (testa o croce)</p>
+      <div class="result">I = −log₂(0.5) = <strong>1 bit</strong></div>
+    </div>
+    <div class="example-box">
+      <div class="ex-label">Esempio 2 — Mazzo di carte</div>
+      <p>p = 1/52 (asso di picche)</p>
+      <div class="result">I = log₂(52) ≈ <strong>5.7 bit</strong> (~6 bit)</div>
+    </div>
+  </div>
+  <div class="example-box" style="margin-top:.5rem">
+    <div class="ex-label">Esempio 3 — Evento certo</div>
+    <p>p ≈ 1 ("domani sorge il sole")</p>
+    <div class="result">I = −log₂(1) = <strong>0 bit</strong> — non comunica nulla di nuovo.</div>
+  </div>
+</section>
+
+<!-- ───────── SORGENTE & ENTROPIA ───────── -->
+<section class="chapter" id="sorgente">
+  <div class="chapter-header">
+    <div class="chapter-num">03</div>
+    <div class="chapter-title">Sorgente & Entropia di Shannon</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Sorgente di informazione</div>
+    <p>Qualsiasi cosa produca messaggi in modo <strong>non completamente prevedibile</strong>: una moneta, un dado, un sensore, un testo. Ogni simbolo emesso trasporta informazione.</p>
+  </div>
+
+  <div class="card accent-yellow">
+    <div class="card-title"><span class="dot"></span> Entropia di Shannon <code>H</code></div>
+    <p class="big-def">Misura quanto è <strong>imprevedibile</strong> una sorgente (media pesata dell'informazione su tutti i possibili eventi).</p>
+    <ul>
+      <li>Se sai già quasi con certezza cosa uscirà → <strong>entropia bassa</strong></li>
+      <li>Se tutti i risultati sono equiprobabili → <strong>entropia massima</strong></li>
+    </ul>
+    <div class="sep"></div>
+    <div class="example-box" style="margin:0">
+      <div class="ex-label">Esempio — Moneta truccata (60% testa, 40% croce)</div>
+      <div class="formula" style="margin:.4rem 0">H = −(0.6·log₂0.6) − (0.4·log₂0.4) ≈ 0.971 bit/lancio</div>
+      <p>Moneta equa → H = 1 bit/lancio. La moneta truccata è più prevedibile, quindi trasmette <em>meno</em> informazione per lancio.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Entropia fisica vs Entropia dell'informazione</div>
+    <table>
+      <tr><th>Entropia fisica</th><th>Entropia dell'informazione</th></tr>
+      <tr><td>gas in una stanza</td><td>sorgente di simboli</td></tr>
+      <tr><td>molecole ordinate</td><td>risultati prevedibili</td></tr>
+      <tr><td>molecole caotiche</td><td>risultati imprevedibili</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ───────── CANALE ───────── -->
+<section class="chapter" id="canale">
+  <div class="chapter-header">
+    <div class="chapter-num">04</div>
+    <div class="chapter-title">Il Canale di Trasmissione</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Cos'è un canale</div>
+    <p>Il mezzo fisico su cui viaggiano i dati tra due dispositivi: cavo Ethernet, fibra ottica, onde radio WiFi, segnale 4G.</p>
+    <ul style="margin-top:.5rem">
+      <li>Non è mai "ideale": ha limiti fisici, introduce ritardi, può perdere dati</li>
+      <li>I bit viaggiano in serie (uno alla volta)</li>
+      <li>I dati vengono divisi in <strong>pacchetti</strong>, trasmessi separatamente e riassemblati a destinazione</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────── BANDWIDTH ───────── -->
+<section class="chapter" id="bandwidth">
+  <div class="chapter-header">
+    <div class="chapter-num">05</div>
+    <div class="chapter-title">Larghezza di Banda (Bandwidth)</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Definizione</div>
+    <p>La <strong>massima quantità di dati al secondo</strong> che un canale può trasportare. È una proprietà del canale fisico.</p>
+    <p style="margin-top:.4rem">Unità: <code>bps</code> · Multipli: <code>Kbps</code> (10³) · <code>Mbps</code> (10⁶) · <code>Gbps</code> (10⁹)</p>
+  </div>
+
+  <div class="card accent-green">
+    <div class="card-title"><span class="dot"></span> Esempi di bandwidth</div>
+    <table>
+      <tr><th>Tecnologia</th><th>Bandwidth</th></tr>
+      <tr><td>Ethernet Gigabit</td><td>1 Gbps</td></tr>
+      <tr><td>WiFi 802.11ac (WiFi 5 GHz)</td><td>fino a 1.3 Gbps</td></tr>
+      <tr><td>FTTH (Fiber To The Home)</td><td>1–10 Gbps</td></tr>
+      <tr><td>4G LTE</td><td>50–150 Mbps</td></tr>
+    </table>
+  </div>
+
+  <div class="warning-box">
+    <strong>Nota terminologica:</strong> in telecomunicazioni "larghezza di banda" indica l'intervallo di frequenze (Hz). Nell'uso informatico comune i due significati si sovrappongono e si usa per indicare i bit/s — tecnicamente un'imprecisione.
+  </div>
+</section>
+
+<!-- ───────── BIT-RATE ───────── -->
+<section class="chapter" id="bitrate">
+  <div class="chapter-header">
+    <div class="chapter-num">06</div>
+    <div class="chapter-title">Bit-rate</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Definizione</div>
+    <p>Quantità di informazione trasferita per unità di tempo durante una trasmissione specifica (un video, uno stream, un download). È sempre <strong>≤ bandwidth</strong> del canale.</p>
+  </div>
+
+  <div class="card accent-yellow">
+    <div class="card-title"><span class="dot"></span> Bit-rate dei video</div>
+    <table>
+      <tr><th>Contenuto</th><th>Bit-rate</th></tr>
+      <tr><td>YouTube 1080p</td><td>~8 Mbps</td></tr>
+      <tr><td>YouTube 4K</td><td>~35–45 Mbps</td></tr>
+      <tr><td>Netflix 4K HDR</td><td>~15 Mbps (compressione più efficiente)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ───────── THROUGHPUT ───────── -->
+<section class="chapter" id="throughput">
+  <div class="chapter-header">
+    <div class="chapter-num">07</div>
+    <div class="chapter-title">Throughput & Buffering</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Throughput</div>
+    <p>Il bit-rate <strong>effettivamente ottenuto</strong>, al netto di tutte le inefficienze, in un determinato momento. È ciò che misura uno speedtest. Sempre ≤ bandwidth.</p>
+  </div>
+
+  <div class="card accent-pink">
+    <div class="card-title"><span class="dot"></span> Perché il throughput è minore della bandwidth</div>
+    <ul>
+      <li><strong>Overhead dei protocolli</strong> — dati aggiuntivi necessari per il funzionamento della rete</li>
+      <li><strong>Errori e ritrasmissioni</strong> — alcuni pacchetti vengono persi e ritrasmessi</li>
+      <li><strong>Contesa del canale</strong> — il WiFi è condiviso da più dispositivi contemporaneamente</li>
+      <li><strong>Elaborazione dei router</strong> — ogni dispositivo lungo il percorso introduce ritardi minimi</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Perché i video vanno in buffering</div>
+    <p>Il <strong>bit-rate richiesto</strong> dal video (es. 10 Mbps) supera il <strong>throughput disponibile</strong> (es. 5 Mbps). Le soluzioni sono:</p>
+    <ul style="margin-top:.4rem">
+      <li>Fermarsi e aspettare di accumulare dati (<strong>buffering</strong>)</li>
+      <li>Abbassare automaticamente la qualità (es. da 1080p a 720p) — come fanno YouTube e Netflix</li>
+    </ul>
+  </div>
+
+  <div class="card accent-green">
+    <div class="card-title"><span class="dot"></span> Esercizio: Download di un gioco (40 GB, 1 Gbps)</div>
+    <div class="example-box">
+      <div class="ex-label">Soluzione</div>
+      <p>1. Converti in bit: 40 GB × 8 = <strong>320 Gb</strong></p>
+      <p>2. Dividi per la bandwidth: 320 Gb ÷ 1 Gbps = <strong>320 s</strong></p>
+      <div class="result">≈ 5 minuti e 20 secondi</div>
+      <p style="margin-top:.4rem">Nella realtà ci si mette di più (throughput < bandwidth per tutti i motivi sopra).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── LATENZA ───────── -->
+<section class="chapter" id="latenza">
+  <div class="chapter-header">
+    <div class="chapter-num">08</div>
+    <div class="chapter-title">Latenza</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Definizione</div>
+    <p>Il tempo che un bit impiega a raggiungere la destinazione. Si misura in <strong>millisecondi (ms)</strong>, si misura con il comando <code>ping</code>. Latenza e bandwidth sono grandezze <strong>indipendenti</strong>.</p>
+  </div>
+
+  <div class="card accent-yellow">
+    <div class="card-title"><span class="dot"></span> Esempio: consegna a mano di un HD</div>
+    <div class="example-box">
+      <p>Consegno un HD da 1 TB a mano in 30 minuti (1800 s).</p>
+      <p>1 TB ≈ 8000 Gb → bit-rate: 8000 Gb ÷ 1800 s ≈ <strong>4.4 Gbps</strong></p>
+      <div class="result">MA latenza = 30 minuti!</div>
+      <p style="margin-top:.3rem">Questo metodo è stato usato davvero per trasferire i dati della prima immagine di un buco nero.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Quando conta la latenza vs la bandwidth</div>
+    <table>
+      <tr><th>Applicazione</th><th>Cosa conta di più</th></tr>
+      <tr><td>Giochi online, videoconferenze</td><td><strong>Latenza bassa</strong> (fondamentale)</td></tr>
+      <tr><td>Streaming Netflix/YouTube, download</td><td><strong>Bandwidth alta</strong> (qualche secondo di ritardo iniziale va bene)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ───────── DUPLEX ───────── -->
+<section class="chapter" id="duplex">
+  <div class="chapter-header">
+    <div class="chapter-num">09</div>
+    <div class="chapter-title">Modalità di Trasmissione: Duplex</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Simplex</div>
+      <p>Trasmissione in <strong>una sola direzione</strong>. Chiamato anche <em>Broadcasting</em>.</p>
+      <p style="margin-top:.4rem; font-size:13px; color:var(--muted)">Esempi: TV digitale terrestre, satellite, GPS.</p>
+    </div>
+    <div class="card accent-green">
+      <div class="card-title"><span class="dot"></span> Full-Duplex</div>
+      <p>Trasmissione bidirezionale <strong>simultanea</strong> (si manda e riceve allo stesso tempo).</p>
+      <p style="margin-top:.4rem; font-size:13px; color:var(--muted)">Esempi: telefonate, Ethernet cablato.</p>
+    </div>
+  </div>
+  <div class="card accent-pink" style="margin-top:0">
+    <div class="card-title"><span class="dot"></span> Half-Duplex</div>
+    <p>Bidirezionale ma <strong>non simultaneo</strong>: si può comunicare in entrambe le direzioni ma una alla volta. Chi riceve deve aspettare che il trasmettitore finisca prima di rispondere.</p>
+    <p style="margin-top:.4rem; font-size:13px; color:var(--muted)">Esempi: WiFi, Bluetooth, walkie-talkie, comunicazioni radio di emergenza.</p>
+  </div>
+</section>
+
+<!-- ───────── TIPI DI RETI ───────── -->
+<section class="chapter" id="reti">
+  <div class="chapter-header">
+    <div class="chapter-num">10</div>
+    <div class="chapter-title">Tipi di Reti per Distanza</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <table style="margin-bottom:1rem">
+    <tr>
+      <th>Sigla</th><th>Nome</th><th>Copertura</th><th>Tecnologia</th>
+    </tr>
+    <tr>
+      <td><code>PAN</code></td>
+      <td>Personal Area Network</td>
+      <td>Pochi metri (intorno a una persona)</td>
+      <td>Bluetooth</td>
+    </tr>
+    <tr>
+      <td><code>LAN</code></td>
+      <td>Local Area Network</td>
+      <td>Singolo edificio / abitazione / scuola / azienda</td>
+      <td>Ethernet (rame o fibra)</td>
+    </tr>
+    <tr>
+      <td><code>WLAN</code></td>
+      <td>Wireless LAN</td>
+      <td>Come LAN, ma senza cavi</td>
+      <td>WiFi (IEEE 802.11)</td>
+    </tr>
+    <tr>
+      <td><code>MAN</code></td>
+      <td>Metropolitan Area Network</td>
+      <td>Area cittadina (interconnessione di più LAN)</td>
+      <td>Ethernet fibra + WiFi</td>
+    </tr>
+    <tr>
+      <td><code>WAN</code></td>
+      <td>Wide Area Network</td>
+      <td>Regioni, paesi, mondo intero</td>
+      <td>Fibra ottica, circuiti in affitto</td>
+    </tr>
+  </table>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Intranet</div>
+      <p>Rete privata aziendale. L'accesso è riservato solo a chi fa parte dell'organizzazione.</p>
+    </div>
+    <div class="card accent-yellow">
+      <div class="card-title"><span class="dot"></span> Extranet</div>
+      <p>Estensione di una LAN che permette anche a soggetti esterni di accedere a certi servizi, con autenticazione e sicurezza.</p>
+    </div>
+  </div>
+
+  <div class="warning-box" style="margin-top:.5rem">
+    <strong>Gerarchia:</strong> PAN → LAN / WLAN → MAN (più LAN collegate) → WAN (più MAN collegate) → Internet
+  </div>
+</section>
+
+<!-- ───────── INDIRIZZI ───────── -->
+<section class="chapter" id="indirizzi">
+  <div class="chapter-header">
+    <div class="chapter-num">11</div>
+    <div class="chapter-title">Modello TCP/IP & Indirizzi di Rete</div>
+    <div class="chapter-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span> Il modello TCP/IP (4 livelli)</div>
+    <table>
+      <tr><th>Livello</th><th>Indirizzo usato</th><th>Esempio</th></tr>
+      <tr><td>Applicazione</td><td>Numero telefonico / nome</td><td>URL, email</td></tr>
+      <tr><td>Trasporto</td><td><strong>Porta</strong> (16 bit)</td><td>Porta 80 = HTTP</td></tr>
+      <tr><td>Internet</td><td><strong>Indirizzo IP</strong></td><td>192.168.1.1</td></tr>
+      <tr><td>Rete (fisico)</td><td><strong>MAC Address</strong></td><td>A8:A1:59:9E:A0:7B</td></tr>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="card accent-green">
+      <div class="card-title"><span class="dot"></span> Numero di Porta <span class="tag tag-green">16 bit</span></div>
+      <p>Permette a un computer di gestire più connessioni contemporaneamente instradando i dati al processo corretto.</p>
+    </div>
+    <div class="card accent-blue" style="border-color: rgba(108,143,255,.3)">
+      <div class="card-title"><span class="dot"></span> Indirizzo IP</div>
+      <p>Identifica univocamente un dispositivo (host) su una rete IP.</p>
+      <div class="formula" style="font-size:12px">IPv4: 192.168.1.1 (32 bit)
+IPv6: fe80::d5af:63a3:a460:4409 (128 bit)</div>
+    </div>
+  </div>
+
+  <div class="card accent-pink">
+    <div class="card-title"><span class="dot"></span> MAC Address <span class="tag tag-blue">48 bit / 6 byte</span></div>
+    <p>Codice <strong>univoco assegnato dal produttore</strong> a ogni scheda di rete (ethernet o wireless). Modificabile via software. Usato per l'accesso al livello fisico/rete.</p>
+    <div class="formula" style="margin-top:.6rem">Formato: A8:A1:59:9E:A0:7B
+          ↑ OUI (produttore) ↑ NIC Specific (dispositivo)</div>
+    <p style="font-size:13px; margin-top:.4rem; color:var(--muted)">I primi 3 byte identificano il produttore (OUI), gli ultimi 3 la scheda specifica.</p>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
