@@ -1,48 +1,44 @@
-function navigate(page){
+function navigate(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(viewId).classList.add('active');
 
-  const views = document.querySelectorAll('.view');
-
-  views.forEach(v => {
-    v.classList.remove('active');
-  });
-
-  const target = document.getElementById(page);
-
-  if(target){
-    target.classList.add('active');
+  if (viewId === 'png') {
+    resetUpload();
   }
 }
 
-/* PNG */
-document.getElementById('png-input').addEventListener('change', e=>{
-  load(e.target.files[0], 'png');
+/* RESET UPLOAD STATE */
+function resetUpload() {
+  const dropzone = document.getElementById('dropzone');
+  const viewer = document.getElementById('viewer');
+
+  dropzone.style.display = 'flex';
+  viewer.style.display = 'none';
+}
+
+/* IMAGE DROP */
+const dropzone = document.getElementById('dropzone');
+const viewer = document.getElementById('viewer');
+const img = document.getElementById('img');
+
+dropzone.addEventListener('dragover', (e) => {
+  e.preventDefault();
 });
 
-/* SCHOOL */
-document.getElementById('school-input').addEventListener('change', e=>{
-  load(e.target.files[0], 'school');
-});
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
 
-function load(file, type){
-
-  if(!file || !file.type.startsWith('image/')) return;
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
 
   const reader = new FileReader();
 
-  reader.onload = e => {
+  reader.onload = (ev) => {
+    img.src = ev.target.result;
 
-    if(type === 'png'){
-      document.getElementById('png-img').src = e.target.result;
-      document.getElementById('png-drop').style.display = 'none';
-      document.getElementById('png-viewer').style.display = 'flex';
-    }
-
-    if(type === 'school'){
-      document.getElementById('school-img').src = e.target.result;
-      document.getElementById('school-drop').style.display = 'none';
-      document.getElementById('school-viewer').style.display = 'flex';
-    }
+    dropzone.style.display = 'none';
+    viewer.style.display = 'flex';
   };
 
   reader.readAsDataURL(file);
-}
+});
