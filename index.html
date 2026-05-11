@@ -2,74 +2,70 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Online App</title>
+  <title>Online</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- HOME -->
-  <div id="home" class="view active">
-    <div class="center">
-      <div class="cards-container">
-        <div class="card" onclick="navigate('png')">
-          <h2>PNG</h2>
-        </div>
-        <div class="card" onclick="navigate('text')">
-          <h2>TEXT</h2>
-        </div>
-        <div class="card" onclick="navigate('school')">
-          <h2>SCUOLA</h2>
-        </div>
+<!-- HOME -->
+<div id="home" class="view active">
+  <div class="center">
+    <div class="cards-wrapper">
+      <div class="card" onclick="navigate('png')">
+        <h2>PNG</h2>
+      </div>
+      <div class="card" onclick="navigate('text')">
+        <h2>TEXT</h2>
+      </div>
+      <div class="card" onclick="navigate('school')">
+        <h2>SCUOLA</h2>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- VIEW: PNG -->
-  <div id="png" class="view">
-    <div class="topbar">
-      <button onclick="navigate('home')">Back</button>
-      <button onclick="resetUpload('png')">Reset</button>
-    </div>
-    <div id="png-drop" class="dropzone">
-      Drop Image (PNG) here
-      <input type="file" id="png-input" accept="image/*">
-    </div>
-    <div id="png-viewer" class="viewer">
-      <img id="png-img">
-    </div>
+<!-- PNG VIEW -->
+<div id="png" class="view">
+  <div class="topbar">
+    <button onclick="navigate('home')">Back</button>
+    <button onclick="resetView('png')">Reset</button>
   </div>
-
-  <!-- VIEW: TEXT -->
-  <div id="text" class="view">
-    <div class="topbar">
-      <button onclick="navigate('home')">Back</button>
-      <button onclick="resetUpload('text')">Reset</button>
-    </div>
-    <div id="text-drop" class="dropzone">
-      Drop Image (TEXT) here
-      <input type="file" id="text-input" accept="image/*">
-    </div>
-    <div id="text-viewer" class="viewer">
-      <img id="text-img">
-    </div>
+  <div id="png-dropzone" class="dropzone" ondragover="event.preventDefault()" ondrop="handleDrop(event, 'png')">
+    Drop PNG here
   </div>
-
-  <!-- VIEW: SCHOOL -->
-  <div id="school" class="view">
-    <div class="topbar">
-      <button onclick="navigate('home')">Back</button>
-      <button onclick="resetUpload('school')">Reset</button>
-    </div>
-    <div id="school-drop" class="dropzone">
-      Drop Image (SCHOOL) here
-      <input type="file" id="school-input" accept="image/*">
-    </div>
-    <div id="school-viewer" class="viewer">
-      <img id="school-img">
-    </div>
+  <div id="png-viewer" class="viewer">
+    <img id="png-img">
   </div>
+</div>
 
-  <script src="script.js"></script>
+<!-- TEXT VIEW -->
+<div id="text" class="view">
+  <div class="topbar">
+    <button onclick="navigate('home')">Back</button>
+    <button onclick="resetView('text')">Reset</button>
+  </div>
+  <div id="text-dropzone" class="dropzone" ondragover="event.preventDefault()" ondrop="handleDrop(event, 'text')">
+    Drop Text Image here
+  </div>
+  <div id="text-viewer" class="viewer">
+    <img id="text-img">
+  </div>
+</div>
+
+<!-- SCHOOL VIEW -->
+<div id="school" class="view">
+  <div class="topbar">
+    <button onclick="navigate('home')">Back</button>
+    <button onclick="resetView('school')">Reset</button>
+  </div>
+  <div id="school-dropzone" class="dropzone" ondragover="event.preventDefault()" ondrop="handleDrop(event, 'school')">
+    Drop School Image here
+  </div>
+  <div id="school-viewer" class="viewer">
+    <img id="school-img">
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
